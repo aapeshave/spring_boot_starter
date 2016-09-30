@@ -7,8 +7,6 @@ import javax.ws.rs.POST;
 
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JacksonJsonParser;
-import org.springframework.boot.json.JsonSimpleJsonParser;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -45,7 +43,7 @@ public class HelloController {
 
 	@Autowired
 	private ApplicationContext appContext;
-	
+
 	@Autowired
 	private RedisTemplate<String, Map<String, Object>> redisTemplate;
 
@@ -78,23 +76,22 @@ public class HelloController {
 
 	@POST
 	@RequestMapping("/person")
-	public Long addPerson(@RequestBody PersonEntity params) 
-	{
+	public Long addPerson(@RequestBody PersonEntity params) {
 		ObjectMapper mapper = new ObjectMapper();
 		Map<String, Object> personMap = (Map<String, Object>) mapper.convertValue(params, Map.class);
 		System.out.println(personMap.toString());
-		
-		Jackson2JsonRedisSerializer<PersonEntity> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(PersonEntity.class);
+
+		Jackson2JsonRedisSerializer<PersonEntity> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<>(
+				PersonEntity.class);
 		redisTemplate.setHashValueSerializer(jackson2JsonRedisSerializer);
 		redisTemplate.setDefaultSerializer(jackson2JsonRedisSerializer);
 		redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
-		
+
 		redisTemplate.opsForValue().set("new", personMap);
 		return params.personID;
 	}
 
-	public JedisConnectionFactory connectionFactory() 
-	{
+	public JedisConnectionFactory connectionFactory() {
 		JedisConnectionFactory connectionFactory = appContext.getBean(JedisConnectionFactory.class);
 		connectionFactory.setHostName("localhost");
 		connectionFactory.setPort(6379);
@@ -112,5 +109,4 @@ public class HelloController {
 		@JsonProperty("password")
 		private String password;
 	}
-
 }

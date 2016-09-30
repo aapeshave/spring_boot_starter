@@ -31,7 +31,7 @@ public class HelloControllerTest {
 
 	@Test
 	public void testGetPerson() throws Exception {
-		mvc.perform(MockMvcRequestBuilders.get("/get_person").accept(MediaType.APPLICATION_JSON))
+		mvc.perform(MockMvcRequestBuilders.get("/person/32").accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andExpect(content().string(containsString("sumit")));
 	}
 }
