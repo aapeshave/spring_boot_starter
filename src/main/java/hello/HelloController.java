@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pojo.Person;
+import service.UserService;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -27,16 +28,11 @@ import java.util.Map;
 @RestController
 public class HelloController {
 
-    private static final int RedisTemplate = 0;
-
-    private static final int String = 0;
-
-    private static final int Map = 0;
-
-    private static final int Object = 0;
-
     @Autowired
     RedisConfig clusterProperties;
+
+    @Autowired
+    UserService userService;
 
     @Autowired
     private ApplicationContext appContext;
