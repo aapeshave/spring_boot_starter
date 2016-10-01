@@ -2,6 +2,7 @@ package hello;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import configuration.RedisConfig;
 import io.swagger.annotations.Api;
@@ -9,7 +10,6 @@ import io.swagger.annotations.ApiOperation;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -61,7 +61,7 @@ public class HelloController {
 
     @POST
     @RequestMapping("/person")
-    public Long addPerson(@RequestBody PersonEntity params) {
+    public String addPerson(@RequestBody PersonEntity params) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> personMap = (Map<String, Object>) mapper.convertValue(params, Map.class);
         System.out.println(personMap.toString());
@@ -73,25 +73,21 @@ public class HelloController {
         redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
 
         redisTemplate.opsForValue().set("new", personMap);
-        return params.personID;
-    }
 
-    public JedisConnectionFactory connectionFactory() {
-        JedisConnectionFactory connectionFactory = appContext.getBean(JedisConnectionFactory.class);
-        connectionFactory.setHostName("localhost");
-        connectionFactory.setPort(6379);
-        return connectionFactory;
+        String result = userService.addPerson(params);
+        System.out.println(result);
+        return result;
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private static class PersonEntity {
+    public static class PersonEntity {
         @JsonProperty("personID")
-        private Long personID;
+        public Long personID;
 
         @JsonProperty("name")
-        private String name;
+        public String name;
 
         @JsonProperty("password")
-        private String password;
+        public String password;
     }
 }
