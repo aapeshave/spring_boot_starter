@@ -30,6 +30,12 @@ dependencies {
     // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
 	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
     compile("org.springframework.boot:spring-boot-starter-actuator")
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger2
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.5.0'
+    // https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.5.0'
+    // https://mvnrepository.com/artifact/org.springframework.data/spring-data-redis
+    compile group: 'org.springframework.data', name: 'spring-data-redis', version: '1.7.3.RELEASE'
     // end::actuator[]
     // tag::tests[]
     testCompile("org.springframework.boot:spring-boot-starter-test")
